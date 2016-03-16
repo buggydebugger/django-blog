@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+ {%  block content %}
+
+
+<h1>{{ post.title }}</h1>
+<pre style="white-space: pre-wrap;">{{ post.content | truncatechars:9 }}</pre>
+ 
+<p>Published: {{ post.pub_date|date }}</p>	
+
+<p>Author: {{ post.author.username }}</p>
+
+ {%  endblock content %}
