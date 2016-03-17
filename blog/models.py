@@ -8,7 +8,6 @@ class Post(models.Model):
     slug = models.SlugField(max_length=100, unique=True, blank=True)
     content = models.TextField()
     pub_date = models.DateField(db_index=True, auto_now_add=True)
-    prepopulated_fields = {'slug': ('title',), }
 
     def __unicode__(self):
         return '%s' % self.title

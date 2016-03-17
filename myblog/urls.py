@@ -15,11 +15,19 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+# from rest_framework.routers import DefaultRouter
+
+
 
 from .forms import MyAuthenticationForm
+from blog.views import PostViewSet
 
+
+# router = DefaultRouter()
+# router.register(r'postapi', PostViewSet)
 
 urlpatterns = [
+    # url(r'^', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('blog.urls', namespace='blog')),
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html',
@@ -27,4 +35,7 @@ urlpatterns = [
         name='blog_login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout',
         {'next_page': 'blog:home'}, name='blog_logout'),
+    url(r'^api-auth/', include('rest_framework.urls',
+                               namespace='rest_framework')),
+
 ]

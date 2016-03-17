@@ -6,8 +6,13 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.utils.text import slugify
-
+from rest_framework import generics
+from rest_framework import viewsets
+from rest_framework import permissions
+from django.shortcuts import get_object_or_404
 from .models import Post
+from .serializers import PostSerializer
+from .permissions import IsOwnerOrReadOnly
 
 def home(req):
     return render(req, template_name="index.html")
@@ -36,6 +41,7 @@ class PostCreateView(CreateView):
 
 
 class PostListView(ListView):
+    paginate_by = 3
     model = Post
 
 class PostDeleteView(DeleteView):
@@ -45,7 +51,18 @@ class PostDeleteView(DeleteView):
 
 class UserPostListView(ListView):
     model = Post
+    paginate_by = 3
 
     def get_queryset(self):
         return self.request.user.posts.all()
-        
+
+# Api Views
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly,)
+    lookup_field = 'slug'
+    
