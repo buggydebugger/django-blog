@@ -1,7 +1,23 @@
 {% extends "index.html" %}
+  {% load staticfiles %}
+
+{% block custom_csss %}
+	<link rel="stylesheet" type="text/css" href="{% static "css/formValidation.min.css" %}">
+{% endblock custom_csss %}
+
+
+{% block custom_js %}
+<script type="text/javascript" src="{% static "js/validate_update.js" %}"></script>
+<script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
+
+<script type="text/javascript" src="{% static "js/jquery.validate.min.js" %}"></script>
+
+
+{% endblock custom_js %}
+
  {%  block content %}
 
-<form action="" method="post">{% csrf_token %}
+<form id="updatefrm"action="" name="updateForm" method="post">{% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Update" />
 </form> 

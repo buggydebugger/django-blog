@@ -1,8 +1,19 @@
 
 
 {% extends "index.html" %}
+{% load staticfiles %}
+
+{% block custom_csss %}
+	<link rel="stylesheet" type="text/css" href="{% static "css/formValidation.min.css" %}">
+{% endblock custom_csss %}
+
+{% block custom_js %}
+<script type="text/javascript" src="{% static "js/jquery.validate.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/validate_create.js" %}"></script>
+{% endblock custom_js %}
+
  {%  block content %}
-<form action="" method="post">{% csrf_token %}
+<form id="createForm" name="PostForm"  action="" method="post" novalidate="novalidate">{% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Create" />
 </form> {%  endblock content %}

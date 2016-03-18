@@ -31,6 +31,7 @@ class PostUpdateView(UpdateView):
 class PostCreateView(CreateView):
     model = Post
     fields = ['title', 'content',]
+    template_name = 'blog/post_create_form.html'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -41,7 +42,7 @@ class PostCreateView(CreateView):
 
 
 class PostListView(ListView):
-    paginate_by = 3
+    paginate_by = 2
     model = Post
 
 class PostDeleteView(DeleteView):
@@ -51,7 +52,8 @@ class PostDeleteView(DeleteView):
 
 class UserPostListView(ListView):
     model = Post
-    paginate_by = 3
+    paginate_by = 2
+    template_name = 'blog/post_usr_list.html'
 
     def get_queryset(self):
         return self.request.user.posts.all()

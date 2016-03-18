@@ -1,6 +1,7 @@
 {% extends "index.html" %}
 {% load staticfiles %}
 
+
 {% block custom_css %}
     <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-dialog.min.css" %}">
 {% endblock custom_css %}
@@ -13,23 +14,22 @@
 {% endblock custom_js %}
  {%  block content %}
 
-<h1>Posts</h1>
+ 
 
+<h1>User Posts</h1>
 <ul>
 {% for post in object_list %}
 <div class="panel panel-info">
 <div class="panel-heading">
     <li><h2>{{ post.title }}</h2> <h3><pre style="white-space: pre-wrap;">{{ post.content | truncatechars:350 }}</pre></h3>
     <h4>{{post.pub_date}}</h4><h4>{{post.author.username}}</h4>
-    <a class="btn btn-primary" href="{{post.get_absolute_url}}"><span class="glyphicon glyphicon-eye-open"></span>  Read..</a>   
-    {% ifequal   request.user post.author%} 
-     	 <button class="btn btn-danger" onclick="del(this,'{{post.slug}}')"><span class="glyphicon glyphicon-remove"></span> Delete</button>   <a class="btn btn-warning" href="{% url 'blog:postupdate' slug=post.slug %}"><span class="glyphicon glyphicon-edit"></span> Update..</a> </li>
+    <a class="btn btn-primary" href="{{post.get_absolute_url}}"><span class="glyphicon glyphicon-eye-open"></span> Read..</a> 
+    <button class="btn btn-danger"   onclick="del(this,'{{post.slug}}')"><span class="glyphicon glyphicon-remove"></span> Delete</button>    <a class="btn btn-warning" href="{% url 'blog:postupdate' slug=post.slug %}"><span class="glyphicon glyphicon-edit"></span> Update..</a></li>
 
-     	
-     {% endifequal %}
 
-    </div>
-    </div>
+</div>
+</div>
+
 {% empty %}
     <li>No posts yet.</li>
 {% endfor %}
@@ -40,13 +40,13 @@
         <h3>
             <span class="page-links">
                 {% if page_obj.has_previous %}
-                    <a href="{% url 'blog:postlist'   %}?page={{page_obj.previous_page_number}}"><span class="glyphicon glyphicon-fast-backward"></span></a>
+                    <a href="{% url 'blog:userpostlist'   %}?page={{page_obj.previous_page_number}}"><span class="glyphicon glyphicon-fast-backward"></span></a>
                 {% endif %}
                 <span class="page-current">
                     Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
                 </span>
                 {% if page_obj.has_next %}
-                    <a href="{% url 'blog:postlist'   %}?page={{page_obj.next_page_number}}"><span class="glyphicon glyphicon-fast-forward"></span></a>
+                    <a href="{% url 'blog:userpostlist'   %}?page={{page_obj.next_page_number}}"><span class="glyphicon glyphicon-fast-forward"></span></a>
                 {% endif %}
             </span>
         </h3>

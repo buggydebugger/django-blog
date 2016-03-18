@@ -144,3 +144,7 @@ LOGIN_REDIRECT_URL = 'blog:home'
 REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]

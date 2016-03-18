@@ -1,4 +1,20 @@
-{% load staticfiles %}
+
+  {% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Django Blog
+	</title>
+<script type="text/javascript" src="{% static "js/jquery-2.2.2.min.js" %}"></script>
+   {% block custom_css %}
+    
+  {% endblock custom_css %}
+  {% block custom_js %}
+    
+  {% endblock custom_js %}
+
 {# Load the tag library #}
 {% load bootstrap3 %}
 
@@ -8,23 +24,16 @@
 
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
-
-<!DOCTYPE html>
-<html>
-<head>
-	<title>
-		
-	</title>
 </head>
 <body>
 {% block navbar %}
 	<nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Django BLog</a>
+      <a class="navbar-brand" href="">Django BLog</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Home</a></li>
+      <li class="active"><a href="/">Home</a></li>
       <li><a href="{% url 'blog:postlist'%}">All-Posts</a></li>
       {% if user.is_authenticated %}
       <li><a href="{% url 'blog:userpostlist'%}">{{user.username}}</a></li>
