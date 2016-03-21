@@ -15,12 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.auth.views import login
 # from rest_framework.routers import DefaultRouter
 
 
 
 from .forms import MyAuthenticationForm
 from blog.views import PostViewSet
+from blog.utils import redirect_loggedin
 
 
 # router = DefaultRouter()
@@ -30,7 +32,7 @@ urlpatterns = [
     # url(r'^', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('blog.urls', namespace='blog')),
-    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html',
+    url(r'^login/$', redirect_loggedin(login), {'template_name': 'login.html',
      'authentication_form':MyAuthenticationForm},
         name='blog_login'),
     url(r'^logout/$', 'django.contrib.auth.views.logout',
