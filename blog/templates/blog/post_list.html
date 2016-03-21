@@ -36,18 +36,22 @@
 </ul>
 
 {% if is_paginated %}
-        <div style="position: absolute; bottom: 5%; left:42%" class="pagination">
+        <div style="position: fixed; bottom: 1%;left:42%" class="pagination">
         <h3>
             <span class="page-links">
+            <div style="position: fixed; bottom: 5%; left:44%" >
                 {% if page_obj.has_previous %}
                     <a href="{% url 'blog:postlist'   %}?page={{page_obj.previous_page_number}}"><span class="glyphicon glyphicon-fast-backward"></span></a>
                 {% endif %}
+                </div>
+                <div style="position: fixed; bottom: 5%; left:46%" >
                 <span class="page-current">
                     Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
                 </span>
                 {% if page_obj.has_next %}
                     <a href="{% url 'blog:postlist'   %}?page={{page_obj.next_page_number}}"><span class="glyphicon glyphicon-fast-forward"></span></a>
                 {% endif %}
+                </div>
             </span>
         </h3>
         </div>
