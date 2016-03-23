@@ -8,7 +8,8 @@
 
 {% block custom_js %}
 
-<script type="text/javascript" src="{% static "js/del_post.js" %}"></script>
+<script type="text/javascript" src="{% static "js/del-post.js" %}"></script>
+<script type="text/javascript" src="{% static "js/get-set.js" %}"></script>
 <script type="text/javascript" src="{% static "js/bootstrap-dialog.min.js" %}"></script>
 {% endblock custom_js %}
  {%  block content %}
@@ -19,9 +20,9 @@
 {% for post in object_list %}
 <div class="panel panel-info">
 <div class="panel-heading">
-    <li><h2>{{ post.title }}</h2> <h3><pre style="white-space: pre-wrap;">{{ post.content | truncatechars:350 }}</pre></h3>
-    <h4>{{post.pub_date}}</h4><h4>{{post.author.username}}</h4>
-    <a class="btn btn-primary" href="{{post.get_absolute_url}}"><span class="glyphicon glyphicon-eye-open"></span>  Read..</a>   
+    <li id="post-{{ forloop.counter }}"><h2 id="post_title">{{ post.title }}</h2> <h3 id="post_content"><pre  style="white-space: pre-wrap;">{{ post.content | truncatechars:350 }}</pre></h3>
+    <h4 id="post_date">{{post.pub_date}}</h4><h4 id="post_author">{{post.author.username}}</h4>
+    <a id="read" class="btn btn-primary" href="{{post.get_absolute_url}}"><span class="glyphicon glyphicon-eye-open"></span>  Read..</a>   
     {% ifequal   request.user post.author%} 
      	 <button class="btn btn-danger" onclick="del(this,'{{post.slug}}')"><span class="glyphicon glyphicon-remove"></span> Delete</button>   <a class="btn btn-warning" href="{% url 'blog:postupdate' slug=post.slug %}"><span class="glyphicon glyphicon-edit"></span> Update..</a> </li>
 
@@ -40,16 +41,16 @@
         <h3>
             <span class="page-links">
             <div style="position: fixed; bottom: 5%; left:44%" >
-                {% if page_obj.has_previous %}
-                    <a href="{% url 'blog:postlist'   %}?page={{page_obj.previous_page_number}}"><span class="glyphicon glyphicon-fast-backward"></span></a>
-                {% endif %}
+                {# {% if page_obj.has_previous %} #}
+                    <a id="previous" onclick="return get_set(this.getAttribute('href'))" style="display: none" href=""><span class="glyphicon glyphicon-fast-backward"></span></a>
+                {# {% endif %} #}
                 </div>
                 <div style="position: fixed; bottom: 5%; left:46%" >
-                <span class="page-current">
+                <span id="page-count" class="page-current">
                     Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
                 </span>
                 {% if page_obj.has_next %}
-                    <a href="{% url 'blog:postlist'   %}?page={{page_obj.next_page_number}}"><span class="glyphicon glyphicon-fast-forward"></span></a>
+                    <a id="next" onclick="return get_set(this.getAttribute('href'))" href="{% url 'blog:postlist'   %}?page={{page_obj.next_page_number}}"><span class="glyphicon glyphicon-fast-forward"></span></a>
                 {% endif %}
                 </div>
             </span>
