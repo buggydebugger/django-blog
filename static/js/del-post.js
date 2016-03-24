@@ -30,7 +30,7 @@ function del(node, slug) {
 			type: 'DELETE',
 			success: function(data, textStatus, jqXHR) {
 				console.log('Data returned from server: ' + data + ', returned status code: ' + textStatus);
-				$(node).parent().parent().parent().remove();
+				$(node).parent().parent().parent().hide();
 				alert('deleted post :' + slug)
 			} || $.noop,
 			beforeSend: function(xhr) {

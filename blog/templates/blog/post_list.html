@@ -20,11 +20,25 @@
 {% for post in object_list %}
 <div class="panel panel-info">
 <div class="panel-heading">
-    <li id="post-{{ forloop.counter }}"><h2 id="post_title">{{ post.title }}</h2> <h3 id="post_content"><pre  style="white-space: pre-wrap;">{{ post.content | truncatechars:350 }}</pre></h3>
-    <h4 id="post_date">{{post.pub_date}}</h4><h4 id="post_author">{{post.author.username}}</h4>
-    <a id="read" class="btn btn-primary" href="{{post.get_absolute_url}}"><span class="glyphicon glyphicon-eye-open"></span>  Read..</a>   
-    {% ifequal   request.user post.author%} 
-     	 <button class="btn btn-danger" onclick="del(this,'{{post.slug}}')"><span class="glyphicon glyphicon-remove"></span> Delete</button>   <a class="btn btn-warning" href="{% url 'blog:postupdate' slug=post.slug %}"><span class="glyphicon glyphicon-edit"></span> Update..</a> </li>
+    <li id="post-{{ forloop.counter }}">
+
+        <h2 id="post_title">{{ post.title }}</h2> 
+
+        <h3 id="post_content">
+            <pre  style="white-space: pre-wrap;">{{ post.content | truncatechars:350 }}</pre>
+        </h3>
+
+        <h4 id="post_date">{{post.pub_date}}</h4><h4 id="post_author">{{post.author.username}}</h4>
+        
+        <a id="read" class="btn btn-primary" href="{{post.get_absolute_url}}"><span class="glyphicon glyphicon-eye-open"></span>  Read..</a> 
+
+        {% ifequal   request.user post.author%} 
+         	 
+             <button id="del_btn" class="btn btn-danger" onclick="del(this,'{{post.slug}}')"><span class="glyphicon glyphicon-remove"></span> Delete</button>  
+
+             <a id="update_btn" class="btn btn-warning" href="{% url 'blog:postupdate' slug=post.slug %}"><span class="glyphicon glyphicon-edit"></span> Update..</a> 
+        
+    </li>
 
      	
      {% endifequal %}
