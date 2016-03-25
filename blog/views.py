@@ -14,6 +14,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.shortcuts import  get_object_or_404
+from django.http import HttpResponse
+
 
 from .models import Post
 from .serializers import PostSerializer
@@ -70,7 +72,7 @@ class PostListView(ListView):
         if self.request.GET.get('page'):
             new_context = {}
             for i, post in enumerate(context['object_list']):
-                new_context[str(i)]={'can_edit': post.author == self.request.user ,'slug':post.slug, 'title': post.title, 'content':post.content,'author': post.author.username, 'pub_date': post.pub_date}
+                new_context[str(i)]={'status_disp':post.get_status_display(),'status':post.status,'can_edit': post.author == self.request.user ,'slug':post.slug, 'title': post.title, 'content':post.content,'author': post.author.username, 'pub_date': post.pub_date}
             new_context.update({ 'page_num': context['page_obj'].number, 'total_pages': context['page_obj'].paginator.num_pages  })
             return JsonResponse(new_context)
         return self.render_to_response(context)
@@ -96,8 +98,9 @@ def create_post(request):
         if form.is_valid():
             title = form.cleaned_data['title']
             content = form.cleaned_data['content']
+            status = form.cleaned_data['status']
             new_post = Post.objects.create(title=title, content=content,
-                                   slug=slugify(title), author=request.user)
+                                   slug=slugify(title), author=request.user, status=status)
             return redirect(new_post)
     else:
         form = PostForm()
@@ -106,19 +109,27 @@ def create_post(request):
 
 @login_required
 def update_post(request, slug):
+    if request.is_ajax() and request.method == 'POST':
+        update_post = get_object_or_404(Post,slug=slug)
+        update_post.status = request.POST.get('status')
+        update_post.save()
+        return HttpResponse(status=201)
+
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data['title']
             content = form.cleaned_data['content']
+            status = form.cleaned_data['status']
             update_post = get_object_or_404(Post,slug=slug)
             update_post.title = title
             update_post.content = content
+            update_post.status =status
             update_post.save()
             return redirect(update_post)
     else:
         update_post = get_object_or_404(Post,slug=slug)
-        form = PostForm(initial={'title': update_post.title, 'content': update_post.content})
+        form = PostForm(initial={'title': update_post.title, 'content': update_post.content ,'status':update_post.status})
 
     return render(request, 'post_create_update_form.html', {'form': form})
 

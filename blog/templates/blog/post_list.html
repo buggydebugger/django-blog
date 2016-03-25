@@ -21,7 +21,7 @@
 <div class="panel panel-info">
 <div class="panel-heading">
     <li id="post-{{ forloop.counter }}">
-
+<input type="hidden" id="slug-{{ forloop.counter }}" name="slug" value="{{post.slug}}" />
         <h2 id="post_title">{{ post.title }}</h2> 
 
         <h3 id="post_content">
@@ -29,19 +29,46 @@
         </h3>
 
         <h4 id="post_date">{{post.pub_date}}</h4><h4 id="post_author">{{post.author.username}}</h4>
+
+
+        <select id="post_status" class="form-control">
+  <option value="PUB" {% ifequal post.status "PUB"  %} selected 
+      
+  {% endifequal %}>Published</option>
+  <option value="UP" {% ifequal post.status "UP"  %} selected 
+      
+  {% endifequal %}>Unpublished</option>
+  <option value="B" {% ifequal post.status "B"  %} selected 
+      
+  {% endifequal %}>Blocked</option>
+</select>
+
+
+
+
+
+
+
+
+
+
+</br>
         
         <a id="read" class="btn btn-primary" href="{{post.get_absolute_url}}"><span class="glyphicon glyphicon-eye-open"></span>  Read..</a> 
 
-        {% ifequal   request.user post.author%} 
-         	 
+        
+         	 {% ifequal   request.user post.author%}
              <a id="del_btn" class="btn btn-danger" href="{% url 'blog:postdelete' slug=post.slug%}"><span class="glyphicon glyphicon-remove"></span> Delete</a>  
 
              <a id="update_btn" class="btn btn-warning" href="{% url 'blog:postupdate' slug=post.slug %}"><span class="glyphicon glyphicon-edit"></span> Update..</a> 
+             {% endifequal %}
+
+             <span id="statuslbl" class="label {% ifequal post.status "PUB"  %}label-success {% endifequal %}{% ifequal post.status "B"  %}label-danger {% endifequal %}{% ifequal post.status "UP"  %}label-info {% endifequal %}">{{post.status}}</span>
         
     </li>
 
      	
-     {% endifequal %}
+     
 
     </div>
     </div>
@@ -54,12 +81,12 @@
         <div style="position: fixed; bottom: 1%;left:42%" class="pagination">
         <h3>
             <span class="page-links">
-            <div style="position: fixed; bottom: 5%; left:44%" >
+            <div style="position: fixed; bottom: 1%; left:44%" >
                 {# {% if page_obj.has_previous %} #}
                     <a id="previous" onclick="return get_set(this.getAttribute('href'))" style="display: none" href=""><span class="glyphicon glyphicon-fast-backward"></span></a>
                 {# {% endif %} #}
                 </div>
-                <div style="position: fixed; bottom: 5%; left:46%" >
+                <div style="position: fixed; bottom: 1%; left:46%" >
                 <span id="page-count" class="page-current">
                     Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
                 </span>

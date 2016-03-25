@@ -1,3 +1,8 @@
+var status_class = new Array();
+status_class['PUB'] = 'label label-primary';
+status_class['B'] = 'label label-danger'
+status_class['UP']='label label-info'
+
 function get_set(href) {
 
 	console.log(href);
@@ -48,13 +53,21 @@ function plug_post(post, id_listnode){
 	pub_date = post['pub_date'];
 	can_edit = post['can_edit'];
 	slug = post['slug']
+	status = post['status']
+	status_disp = post['status_disp']
 	links_obj = get_links_obj(slug);
 
 	$(id_listnode+" > #post_title").text(title);
 	$(id_listnode+" > #post_content").html("<pre  style='white-space: pre-wrap;'>"+ content.substring(0,300)+"</pre>" );
 	$(id_listnode+" > #post_author").text(author);
+	// $(id_listnode+" > #post_status").text(status);
 	$(id_listnode+" > #post_date").text(pub_date);
 	$(id_listnode+" > #read").attr("href",links_obj['read_link']);
+	$(id_listnode+ "> #post_status").val(status);
+	$(id_listnode+ " > #statuslbl").text(status);
+	$(id_listnode+ " > #statuslbl").attr('class',status_class[status]);
+
+
 
 	if(can_edit){
 
@@ -122,3 +135,47 @@ function get_links_obj(slug){
 	var del_link = "/post/delete/" + slug
 	return {'read_link': read_link, 'update_link': update_link, 'del_link': del_link};
 }
+
+
+$(function(){
+
+post_ids = ["#post-1", "#post-2"];
+$.each(post_ids, function(index, id){
+
+	$(id+ "> select").change(function(){
+		slug= $("#slug-"+(index+1)).val();
+		id_statuslbl = id + " > #statuslbl";
+		changed_status= $(id + "> select option:selected").val()
+		console.log(id+ "  "+ changed_status+ "   "+slug);
+		var url= "/post/update/" + slug +"/";
+		var data= {status:changed_status};
+
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: data,
+			success: function(data, textStatus, jqXHR) {
+				console.log('Data returned from server: ' + data + ', returned status code: ' + textStatus);
+				
+				
+
+				$(id_statuslbl).text(changed_status);
+				$(id_statuslbl).attr('class',status_class[changed_status]);
+				alert('updated post status of :' + slug +" to "+changed_status);
+
+			} || $.noop,
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("X-CSRFToken", csrftoken);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				alert('update status failed: ' + slug)
+				console.log('returned status code: ' + textStatus);
+				console.log('errorThrown: ' + errorThrown);
+
+			} || $.noop
+		});
+
+	});
+});
+
+});
