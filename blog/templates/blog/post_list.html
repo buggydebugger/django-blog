@@ -34,7 +34,7 @@
 
         {% ifequal   request.user post.author%} 
          	 
-             <button id="del_btn" class="btn btn-danger" onclick="del(this,'{{post.slug}}')"><span class="glyphicon glyphicon-remove"></span> Delete</button>  
+             <a id="del_btn" class="btn btn-danger" href="{% url 'blog:postdelete' slug=post.slug%}"><span class="glyphicon glyphicon-remove"></span> Delete</a>  
 
              <a id="update_btn" class="btn btn-warning" href="{% url 'blog:postupdate' slug=post.slug %}"><span class="glyphicon glyphicon-edit"></span> Update..</a> 
         
