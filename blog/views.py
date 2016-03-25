@@ -11,9 +11,14 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework import permissions
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from django.shortcuts import  get_object_or_404
+
 from .models import Post
 from .serializers import PostSerializer
 from .permissions import IsOwnerOrReadOnly
+from .forms import PostForm
 
 def home(req):
     return render(req, template_name="index.html")
@@ -83,6 +88,44 @@ class UserPostListView(ListView):
 
     def get_queryset(self):
         return self.request.user.posts.all()
+
+@login_required
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+            new_post = Post.objects.create(title=title, content=content,
+                                   slug=slugify(title), author=request.user)
+            return redirect(new_post)
+    else:
+        form = PostForm()
+
+    return render(request, 'post_create_update_form.html', {'form': form})
+
+@login_required
+def update_post(request, slug):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+            update_post = get_object_or_404(Post,slug=slug)
+            update_post.title = title
+            update_post.content = content
+            update_post.save()
+            return redirect(update_post)
+    else:
+        update_post = get_object_or_404(Post,slug=slug)
+        form = PostForm(initial={'title': update_post.title, 'content': update_post.content})
+
+    return render(request, 'post_create_update_form.html', {'form': form})
+
+
+
+
+
 
 # Api Views
 
