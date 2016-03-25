@@ -59,11 +59,11 @@ function plug_post(post, id_listnode){
 	if(can_edit){
 
 		if($(id_listnode+" > #del_btn").length){
-			$(id_listnode+" > #del_btn").attr('onclick',"del(this,'"+slug+"')");
+			$(id_listnode+" > #del_btn").attr('href',links_obj['del_link']);
 		}
 		else{
 
-			$(id_listnode).append('<button id="del_btn" class="btn btn-danger" onclick="del(this,'+"'"+slug+"')"+'"'+'><span class="glyphicon glyphicon-remove"></span> Delete</button>');
+			$(id_listnode).append('<a id="del_btn" class="btn btn-danger" href="'+ links_obj['del_link']+'"><span class="glyphicon glyphicon-remove"></span> Delete</a>');
 			 
 
 		}
@@ -119,5 +119,6 @@ function set_paginator(total_pages, page_num){
 function get_links_obj(slug){
 	var read_link = "/post/view/" + slug ;
 	var update_link = "/post/update/" + slug ;
-	return {'read_link': read_link, 'update_link': update_link};
+	var del_link = "/post/delete/" + slug
+	return {'read_link': read_link, 'update_link': update_link, 'del_link': del_link};
 }
